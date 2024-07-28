@@ -40,7 +40,7 @@ npm install
 yarn install
 ```
 
-3. Create a `.env` file in the root directory, copy and paste below to the file (see .env.example):
+3. Create a `.env` file in the root directory of the rnm-graphql-server, copy and paste below to the file (see .env.example):
 
 ```bash
 PORT=4000
@@ -69,7 +69,7 @@ npm install
 yarn install
 ```
 
-3. Create a `.env` file in the root directory, copy and paste below to the file (see .env.example):
+3. Create a `.env` file in the root directory of the rnm-character-browser, copy and paste below to the file (see .env.example):
 
 ```bash
 NEXT_PUBLIC_APOLLO_CLIENT_URL=http://localhost:4000/graphql
@@ -102,6 +102,8 @@ yarn dev
 3. Open [http://localhost:3000](http://localhost:3000) in your browser to see the frontend, and the backend will be running at [http://localhost:4000/graphql](http://localhost:4000/graphql).
 
 ## Learn More
+
+### Technologies used
 
 **React**: A JavaScript library for building user interfaces.
 

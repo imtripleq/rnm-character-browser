@@ -22,21 +22,25 @@ const server = new ApolloServer({
 });
 
 async function startServer() {
-  await server.start();
+  try {
+    await server.start();
 
-  app.use(
-    "/graphql",
-    cors<cors.CorsRequest>(),
-    express.json(),
-    expressMiddleware(server, {
-      context: async ({ req }) => ({ token: req.headers.token }),
-    })
-  );
+    app.use(
+      "/graphql",
+      cors<cors.CorsRequest>(),
+      express.json(),
+      expressMiddleware(server, {
+        context: async ({ req }) => ({ token: req.headers.token }),
+      })
+    );
 
-  await new Promise<void>((resolve) =>
-    httpServer.listen({ port: PORT }, resolve)
-  );
-  console.log(`🚀 GraphQL Server ready at http://localhost:${PORT}/`);
+    await new Promise<void>((resolve) =>
+      httpServer.listen({ port: PORT }, resolve)
+    );
+    console.log(`🚀 GraphQL Server ready at http://localhost:${PORT}/`);
+  } catch (e) {
+    console.log(`Error starting server: ${e}`);
+  }
 }
 
 startServer();
