@@ -3,6 +3,8 @@
 import { useSearchParams } from "next/navigation";
 import { useQuery, gql } from "@apollo/client";
 import React, { Suspense } from "react";
+import Loading from "@/components/Loading";
+import Image from "next/image";
 
 const GET_CHARACTER = gql`
   query GetCharacter($id: ID!) {
@@ -37,18 +39,20 @@ const CharacterDetail = () => {
 
   if (loading) return;
   <div className="flex min-h-screen items-center justify-center">
-    <p>Loading...</p>
+    <Loading />
   </div>;
   if (error) return <p>Error: {error.message}</p>;
   const character = data.character;
   if (!character) return <p>Character Not Found</p>;
 
   return (
-    <div className="flex flex-col min-h-screen items-center justify-center p-4">
-      <img
+    <div className="flex md:flex-row flex-col min-h-screen justify-center p-4">
+      <Image
+        width={240}
+        height={240}
         src={character.image}
         alt={character.name}
-        className="rounded-lg mb-4"
+        className="rounded-lg mb-4 md:mr-20 md:self-start self-center"
       />
       <div>
         <div className="flex py-3 sm:px-0 justify-center">
