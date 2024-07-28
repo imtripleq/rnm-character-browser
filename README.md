@@ -7,6 +7,7 @@ Explore and discover characters from the Rick and Morty universe. This demo show
 - Browse detailed profiles of Rick and Morty characters.
 - Seamless pagination to navigate through different pages of characters.
 - Dynamic data fetching using Apollo GraphQL.
+- Built using the monorepo method to streamline project management and simplify the setup process.
 
 ## Live Demo
 
@@ -28,26 +29,17 @@ Ensure you have the following installed:
 ```bash
 git clone https://github.com/imtripleq/rnm-character-browser.git
 
-# Go to graphql server folder
 cd rnm-graphql-server
 ```
 
-2. Install dependencies:
-
-```bash
-npm install
-# or
-yarn install
-```
-
-3. Create a `.env` file in the root directory of the rnm-graphql-server, copy and paste below to the file (see .env.example):
+2. Create a `.env` file in the root directory of the rnm-graphql-server, copy and paste below to the file (see .env.example):
 
 ```bash
 PORT=4000
 API_URL=https://rickandmortyapi.com/graphql
 ```
 
-4. Go back to the root folder:
+3. Go back to the root folder:
 
 ```bash
 cd ..
@@ -61,21 +53,13 @@ cd ..
 cd rnm-character-browser
 ```
 
-2. Install dependencies:
-
-```bash
-npm install
-# or
-yarn install
-```
-
-3. Create a `.env` file in the root directory of the rnm-character-browser, copy and paste below to the file (see .env.example):
+2. Create a `.env` file in the root directory of the rnm-character-browser, copy and paste below to the file (see .env.example):
 
 ```bash
 NEXT_PUBLIC_APOLLO_CLIENT_URL=http://localhost:4000/graphql
 ```
 
-4. Go back to the root folder:
+3. Go back to the root folder:
 
 ```bash
 cd ..
@@ -83,7 +67,7 @@ cd ..
 
 ### Running the Application
 
-1. Install concurrently in the root folder to run both frontend and backend:
+1. Install all dependencies in the root folder to run both frontend and backend:
 
 ```bash
 npm install
