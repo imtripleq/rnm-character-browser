@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "workspaces": [
+    "rnm-character-browser",
+    "rnm-graphql-server"
+  ],
+  "scripts": {
+    "build": "yarn workspace rnm-character-browser build",
+    "dev": "concurrently \"yarn workspace rnm-graphql-server start\" \"yarn workspace rnm-character-browser dev\"",
+    "netlify dev": "netlify dev"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
