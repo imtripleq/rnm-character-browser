@@ -28,15 +28,8 @@ const Pagination: React.FC<PaginationProps> = ({
     <div className="flex flex-col items-center">
       {/* Help text */}
       <span className="text-sm text-gray-400">
-        Showing{" "}
-        <span className="font-semibold text-gray-100">
-          {(currentPage - 1) * 10 + 1}
-        </span>{" "}
-        to{" "}
-        <span className="font-semibold text-gray-100">{currentPage * 10}</span>{" "}
-        of{" "}
-        <span className="font-semibold text-gray-100">{totalPages * 10}</span>{" "}
-        Entries
+        Page <span className="font-semibold text-gray-100">{currentPage}</span>{" "}
+        of <span className="font-semibold text-gray-100">{totalPages}</span>{" "}
       </span>
       <div className="inline-flex mt-2 xs:mt-0">
         {/* Buttons */}
