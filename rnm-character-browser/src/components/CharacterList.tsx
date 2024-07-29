@@ -6,7 +6,7 @@ import Link from "next/link";
 import React, { useMemo, useState } from "react";
 import Pagination from "./Pagination";
 import Loading from "./Loading";
-import Image from "next/image";
+import CharacterCard from "../components/CharacterCard";
 
 export const GET_CHARACTERS = gql`
   query GetCharacters($page: Int) {
@@ -14,8 +14,8 @@ export const GET_CHARACTERS = gql`
       results {
         id
         name
-        image
         status
+        image
         species
       }
       info {
@@ -55,8 +55,8 @@ export default function CharacterList() {
     setSortOrder("asc");
   };
 
-  const handleSortOrder = () => {
-    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  const handleSortOrder = (order: string) => {
+    setSortOrder(order);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,17 +79,17 @@ export default function CharacterList() {
       );
     }
 
-    // If the return result is negative, a is sorted before b. Vice versa.
-    if (sortField) {
-      sortedResults.sort((a, b) => {
-        const fieldA = a[sortField];
-        const fieldB = b[sortField];
+    const sortBy = sortField || "id";
 
-        if (fieldA < fieldB) return sortOrder === "asc" ? -1 : 1;
-        if (fieldA > fieldB) return sortOrder === "asc" ? 1 : -1;
-        return 0;
-      });
-    }
+    // If the return result is negative, a is sorted before b. Vice versa.
+    sortedResults.sort((a, b) => {
+      const fieldA = a[sortBy];
+      const fieldB = b[sortBy];
+
+      if (fieldA < fieldB) return sortOrder === "asc" ? -1 : 1;
+      if (fieldA > fieldB) return sortOrder === "asc" ? 1 : -1;
+      return 0;
+    });
 
     return sortedResults;
   }, [data, sortField, sortOrder, search]);
@@ -98,76 +98,70 @@ export default function CharacterList() {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div>
-      <div className="flex w-max justify-between mb-4">
+    <div className="container mx-auto px-4 py-8 text-white min-h-screen">
+      <div className="flex justify-between mb-4">
         <input
           type="text"
           placeholder="Search..."
           value={search}
           onChange={handleSearchChange}
-          className="border p-2 rounded text-gray-900"
+          className="border p-2 rounded text-gray-900 bg-green-200 focus:ring-2 focus:ring-green-400 focus:border-green-300"
         />
-        <form className="flex">
+        <form className="flex items-center">
           <select
             onChange={(e) => handleSortChange(e.target.value)}
             id="underline_select"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="ml-2 bg-green-200 border border-green-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-300 p-2.5 hover:bg-green-300"
           >
             <option value="">Sort By</option>
             <option value="name">Name</option>
             <option value="status">Status</option>
             <option value="species">Species</option>
           </select>
-          {sortField !== "" && (
-            <button
-              type="button"
-              onClick={handleSortOrder}
-              className="bg-gray-50 border border-gray-300 text-gray-900 hover:text-blue-700 hover:bg-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            >
-              {sortOrder}
-            </button>
-          )}
+          <div className="flex items-center ml-2">
+            <label className="flex items-center mr-2">
+              <input
+                type="radio"
+                name="sortOrder"
+                value="asc"
+                checked={sortOrder === "asc"}
+                onChange={() => handleSortOrder("asc")}
+                className="mr-1"
+              />
+              Up
+            </label>
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="sortOrder"
+                value="desc"
+                checked={sortOrder === "desc"}
+                onChange={() => handleSortOrder("desc")}
+                className="mr-1"
+              />
+              Down
+            </label>
+          </div>
         </form>
       </div>
-      <ul role="list" className="divide-y divide-gray-100">
-        {sortedData.map((character: any) => (
-          <Link key={character.id} href={`/character?id=${character.id}`}>
-            <li className="flex justify-between md:gap-x-96 py-5">
-              <div className="flex min-w-0 gap-x-4">
-                <Image
-                  width={96}
-                  height={96}
-                  loading="lazy"
-                  alt={`Avatar image for ${character.name}`}
-                  src={character.image}
-                  className="h-12 w-12 flex-none rounded-full bg-gray-50"
-                />
-                <div className="min-w-0 flex-auto">
-                  <p className="text-sm font-semibold leading-6 text-gray-200">
-                    {character.name}
-                  </p>
-                  <p className="mt-1 truncate text-xs leading-5 text-gray-100">
-                    {character.species}
-                  </p>
-                </div>
-              </div>
-              <div className="shrink-0 sm:flex sm:flex-col sm:items-end">
-                <p className="text-sm leading-6 text-gray-300">
-                  {character.role}
-                </p>
-                <p className="mt-1 text-xs leading-5 text-gray-200">
-                  Status {character.status}
-                </p>
-              </div>
-            </li>
-          </Link>
-        ))}
-      </ul>
-      <Pagination
-        currentPage={pageNum}
-        totalPages={data?.characters.info.pages || 1}
-        onPageChange={handlePageChange}
-      />
+      {sortedData.length > 0 ? (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {sortedData.map((character) => (
+            <Link key={character.id} href={`/character?id=${character.id}`}>
+              <CharacterCard character={character} />
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center text-white mt-8">No characters found.</div>
+      )}
+      <div className="mt-6">
+        <Pagination
+          currentPage={pageNum}
+          totalPages={data?.characters.info.pages || 1}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </div>
   );
 }

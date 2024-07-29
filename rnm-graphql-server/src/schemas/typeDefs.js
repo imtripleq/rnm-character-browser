@@ -6,6 +6,8 @@ export const typeDefs = `#graphql
     status: String
     image: String
     species: String
+    gender: String
+    type: String
     origin: Origin
     location: Location
     episode: [Episode]
@@ -47,7 +49,7 @@ export const typeDefs = `#graphql
     name: String
   }
 
-  input  FilterCharacter{
+  input FilterCharacter{
     gender: String
     name: String
     species: String

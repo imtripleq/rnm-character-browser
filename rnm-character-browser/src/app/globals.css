@@ -1,18 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap");
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 51, 0;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 51, 102;
-    --background-end-rgb: 0, 102, 204;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 51, 0;
   }
 }
 
@@ -30,4 +31,101 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+@font-face {
+  font-family: "Get Schwifty";
+  src: url("/get_schwifty.ttf") format("truetype");
+}
+
+.heading-rick-and-morty {
+  font-family: "Get Schwifty", sans-serif;
+  color: #00ff00;
+  text-shadow: 2px 2px 0 #000000;
+}
+
+.font-rick-and-morty {
+  font-family: "Luckiest Guy", cursive;
+}
+
+@keyframes gradient-border {
+  0% {
+    border-image-source: linear-gradient(
+      45deg,
+      #ff0000,
+      #ff8000,
+      #ffff00,
+      #00ff00,
+      #ff0000
+    );
+  }
+  25% {
+    border-image-source: linear-gradient(
+      45deg,
+      #ff8000,
+      #ffff00,
+      #00ff00,
+      #ff0000,
+      #ff0000
+    );
+  }
+  50% {
+    border-image-source: linear-gradient(
+      45deg,
+      #ffff00,
+      #00ff00,
+      #ff0000,
+      #ff0000,
+      #ff8000
+    );
+  }
+  75% {
+    border-image-source: linear-gradient(
+      45deg,
+      #00ff00,
+      #ff0000,
+      #ff0000,
+      #ff8000,
+      #ffff00
+    );
+  }
+  100% {
+    border-image-source: linear-gradient(
+      45deg,
+      #ff0000,
+      #ff8000,
+      #ffff00,
+      #00ff00,
+      #ff0000
+    );
+  }
+}
+
+.border-gradient {
+  border-width: 4px;
+  border-style: solid;
+  border-image-slice: 1;
+  animation: gradient-border 0.8s linear infinite;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+}
+
+.min-h-screen {
+  min-height: 100vh;
 }

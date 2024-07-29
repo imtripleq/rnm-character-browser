@@ -13,6 +13,8 @@ export const resolvers = {
                 status
                 image
                 species
+                gender
+                type
                 origin {
                   name
                 }
@@ -20,7 +22,11 @@ export const resolvers = {
                   name
                 }
                 episode {
+                  episode
                   name
+                  created
+                  id
+                  air_date
                 }
               }
               info {
@@ -49,6 +55,8 @@ export const resolvers = {
               status
               image
               species
+              gender
+              type
               origin {
                 name
                 id
@@ -58,7 +66,11 @@ export const resolvers = {
                 name
               }
               episode {
+                episode
                 name
+                created
+                id
+                air_date
               }
             }
           }

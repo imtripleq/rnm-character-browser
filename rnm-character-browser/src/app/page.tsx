@@ -2,10 +2,10 @@ export default function Home() {
   return (
     <main className="flex flex-col min-h-screen items-center justify-center">
       <div className="flex flex-col items-center justify-center">
-        <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+        <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-white md:text-5xl lg:text-6xl dark:text-white">
           {`Dennis' Demo`}
         </h1>
-        <p className="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400 text-center">
+        <p className="mb-6 text-lg font-normal text-gray-300 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-300 text-center">
           Explore and Discover Characters from the Rick and Morty Universe.
           Easily browse through detailed character profiles, including their
           status, species, and origins, with seamless pagination and dynamic

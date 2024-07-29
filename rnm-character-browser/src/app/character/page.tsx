@@ -1,10 +1,11 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useQuery, gql } from "@apollo/client";
 import React, { Suspense } from "react";
 import Loading from "@/components/Loading";
 import Image from "next/image";
+import { FaArrowLeft } from "react-icons/fa";
 
 const GET_CHARACTER = gql`
   query GetCharacter($id: ID!) {
@@ -23,6 +24,7 @@ const GET_CHARACTER = gql`
         name
       }
       episode {
+        episode
         name
       }
     }
@@ -31,77 +33,85 @@ const GET_CHARACTER = gql`
 
 const CharacterDetail = () => {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const id = searchParams.get("id");
 
   const { loading, error, data } = useQuery(GET_CHARACTER, {
     variables: { id },
   });
+  console.log("🚀 ~ CharacterDetail ~ data!!", data);
 
-  if (loading) return;
-  <div className="flex min-h-screen items-center justify-center">
-    <Loading />
-  </div>;
+  if (loading)
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Loading />
+      </div>
+    );
   if (error) return <p>Error: {error.message}</p>;
   const character = data.character;
   if (!character) return <p>Character Not Found</p>;
 
   return (
-    <div className="flex md:flex-row flex-col min-h-screen justify-center p-4">
-      <Image
-        width={240}
-        height={240}
-        src={character.image}
-        alt={character.name}
-        className="rounded-lg mb-4 md:mr-20 md:self-start self-center"
-      />
-      <div>
-        <div className="flex py-3 sm:px-0 justify-center">
-          <h1 className="text-base text-4xl font-semibold leading-7 text-gray-300">
-            {character.name}
-          </h1>
+    <div className="min-h-screen bg-black text-white p-4">
+      <div className="flex justify-left items-center mb-4">
+        <button
+          onClick={() => router.back()}
+          className="text-green-400 flex items-center space-x-2 hover:text-green-300 mb-10"
+        >
+          <FaArrowLeft />
+          <span>Back to Listing</span>
+        </button>
+      </div>
+      <div className="flex flex-col md:flex-row justify-center items-center md:items-start">
+        <div className="relative w-60 h-60 md:w-80 md:h-80 mb-4 md:mb-0 md:mr-10">
+          <Image
+            width={320}
+            height={320}
+            src={character.image}
+            alt={character.name}
+            className="rounded-lg object-cover"
+          />
         </div>
-        <div className="mt-6 border-t border-gray-100">
-          <dl className="divide-y divide-gray-100">
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-              <dt className="text-sm font-medium leading-6 text-gray-300">
-                Status
-              </dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-100 sm:col-span-2 sm:mt-0">
-                {character.status}
-              </dd>
-            </div>
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-              <dt className="text-sm font-medium leading-6 text-gray-300">
-                Origin
-              </dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-100 sm:col-span-2 sm:mt-0">
-                {character.origin.name}
-              </dd>
-            </div>
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-              <dt className="text-sm font-medium leading-6 text-gray-300">
-                Location
-              </dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-100 sm:col-span-2 sm:mt-0">
-                {character.location.name}
-              </dd>
-            </div>
-
-            {character.episode.length && (
-              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt className="text-sm font-medium leading-6 text-gray-300">
-                  Episode
-                </dt>
-                <dd className="mt-1 text-sm leading-6 text-gray-100 sm:col-span-2 sm:mt-0">
-                  <ul>
-                    {character.episode.map((ep: any, index: number) => (
-                      <li key={index}>{ep.name}</li>
-                    ))}
-                  </ul>
+        <div className="bg-green-700 p-6 rounded-lg shadow-lg w-full max-w-2xl">
+          <div className="text-center mb-4">
+            <h1 className="text-4xl font-bold">{character.name}</h1>
+          </div>
+          <div className="border-t border-gray-500 mt-4 pt-4">
+            <dl className="space-y-4">
+              <div className="flex">
+                <dt className="font-medium text-gray-300 w-1/3">Status:</dt>
+                <dd className="text-gray-100 w-2/3">{character.status}</dd>
+              </div>
+              <div className="flex">
+                <dt className="font-medium text-gray-300 w-1/3">Species:</dt>
+                <dd className="text-gray-100 w-2/3">{character.species}</dd>
+              </div>
+              <div className="flex">
+                <dt className="font-medium text-gray-300 w-1/3">Origin:</dt>
+                <dd className="text-gray-100 w-2/3">{character.origin.name}</dd>
+              </div>
+              <div className="flex">
+                <dt className="font-medium text-gray-300 w-1/3">Location:</dt>
+                <dd className="text-gray-100 w-2/3">
+                  {character.location.name}
                 </dd>
               </div>
-            )}
-          </dl>
+              {character.episode.length > 0 && (
+                <div className="flex">
+                  <dt className="font-medium text-gray-300 w-1/3">Episodes:</dt>
+                  <dd className="text-gray-100 w-2/3">
+                    <ul>
+                      {character.episode.map((ep: any, index: number) => (
+                        <li key={index} className="mb-1">
+                          {ep.name}
+                        </li>
+                      ))}
+                    </ul>
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </div>
         </div>
       </div>
     </div>
@@ -109,7 +119,7 @@ const CharacterDetail = () => {
 };
 
 const CharacterPage = () => (
-  <Suspense>
+  <Suspense fallback={<Loading />}>
     <CharacterDetail />
   </Suspense>
 );
