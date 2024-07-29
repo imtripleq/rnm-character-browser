@@ -1,3 +1,7 @@
+/**
+ * @type {import('graphql').DocumentNode}
+ */
+
 // TODO: Finish all types and input
 export const typeDefs = `#graphql
   type Character {

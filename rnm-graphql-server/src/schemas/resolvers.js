@@ -1,3 +1,7 @@
+/**
+ * @type {import('@apollo/server').IResolvers}
+ */
+
 import axios from "axios";
 
 // Resolvers query has to match with frontend to avoid returning null value to the frontend request
