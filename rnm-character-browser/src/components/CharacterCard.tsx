@@ -3,22 +3,22 @@ import Image from "next/legacy/image";
 import { getSpeciesIcon, getStatusIcon } from "@/helper/iconMapper";
 import { FaHeartbeat, FaUserAlt } from "react-icons/fa";
 
-const CharacterCard = ({ character }) => {
+const CharacterCard = ({ character }: any) => {
   const [showDetails, setShowDetails] = useState(false);
 
   return (
     <div
-      className={`relative bg-green-500 p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer overflow-hidden md:h-96 h-auto w-64 ${
+      className={`relative bg-green-500 p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer overflow-hidden h-auto md:h-96 w-full max-w-xs mx-auto ${
         showDetails ? "border-gradient" : ""
       }`}
       onMouseEnter={() => setShowDetails(true)}
       onMouseLeave={() => setShowDetails(false)}
     >
       <div className="flex flex-col items-center">
-        <h2 className="text-xl font-bold text-white mb-4 h-12 flex items-center justify-center font-rick-and-morty">
+        <h2 className="text-xl font-bold text-white mb-4 h-12 flex items-center justify-center">
           {character.name}
         </h2>
-        <div className="md:w-48 md:h-56 h-40 w-40 relative mb-4">
+        <div className="w-36 h-36 md:w-48 md:h-56 relative mb-4">
           <Image
             src={character.image}
             alt={character.name}
@@ -32,15 +32,11 @@ const CharacterCard = ({ character }) => {
         <div className="flex justify-around w-full mt-auto md:mt-2 text-white">
           <div className="flex flex-col items-center">
             {getSpeciesIcon(character.species)}
-            <span className="hidden md:flex font-rick-and-morty">
-              {character.species}
-            </span>
+            <span className="hidden md:flex">{character.species}</span>
           </div>
           <div className="flex flex-col items-center">
             {getStatusIcon(character.status)}
-            <span className="hidden md:flex font-rick-and-morty">
-              {character.status}
-            </span>
+            <span className="hidden md:flex">{character.status}</span>
           </div>
         </div>
       </div>

@@ -99,7 +99,7 @@ export default function CharacterList() {
 
   return (
     <div className="container mx-auto px-4 py-8 text-white min-h-screen">
-      <div className="flex justify-between mb-4">
+      <div className="flex flex-col md:flex-row justify-between mb-4">
         <input
           type="text"
           placeholder="Search..."
@@ -107,7 +107,7 @@ export default function CharacterList() {
           onChange={handleSearchChange}
           className="border p-2 rounded text-gray-900 bg-green-200 focus:ring-2 focus:ring-green-400 focus:border-green-300"
         />
-        <form className="flex items-center">
+        <form className="flex flex-col md:flex-row items-center">
           <select
             onChange={(e) => handleSortChange(e.target.value)}
             id="underline_select"
@@ -118,7 +118,7 @@ export default function CharacterList() {
             <option value="status">Status</option>
             <option value="species">Species</option>
           </select>
-          <div className="flex items-center ml-2">
+          <div className="flex items-center md:ml-2">
             <label className="flex items-center mr-2">
               <input
                 type="radio"
