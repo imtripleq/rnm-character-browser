@@ -103,7 +103,7 @@ const CharacterDetail = () => {
                     <ul>
                       {character.episode.map((ep: any, index: number) => (
                         <li key={index} className="mb-1">
-                          {ep.name}
+                          {ep.episode} : {ep.name}
                         </li>
                       ))}
                     </ul>

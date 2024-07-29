@@ -98,20 +98,20 @@ export default function CharacterList() {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="container mx-auto px-4 py-8 text-white min-h-screen">
-      <div className="flex flex-col md:flex-row justify-between mb-4">
+    <div className="container mx-auto px-4 py-8 text-white min-h-screen w-full">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-4 w-full">
         <input
           type="text"
           placeholder="Search..."
           value={search}
           onChange={handleSearchChange}
-          className="border p-2 rounded text-gray-900 bg-green-200 focus:ring-2 focus:ring-green-400 focus:border-green-300"
+          className="border p-2 rounded text-gray-900 bg-green-200 focus:ring-2 focus:ring-green-400 focus:border-green-300 h-10 w-full md:w-auto"
         />
-        <form className="flex flex-col md:flex-row items-center">
+        <form className="flex items-center">
           <select
             onChange={(e) => handleSortChange(e.target.value)}
             id="underline_select"
-            className="ml-2 bg-green-200 border border-green-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-300 p-2.5 hover:bg-green-300"
+            className="md:ml-2 mr-4 my-4 bg-green-200 border border-green-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-300 p-2.5 hover:bg-green-300"
           >
             <option value="">Sort By</option>
             <option value="name">Name</option>

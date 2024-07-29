@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import { getSpeciesIcon, getStatusIcon } from "@/helper/iconMapper";
 import { FaHeartbeat, FaUserAlt } from "react-icons/fa";
 
@@ -22,8 +22,11 @@ const CharacterCard = ({ character }: any) => {
           <Image
             src={character.image}
             alt={character.name}
-            layout="fill"
-            objectFit="cover"
+            fill
+            sizes="(max-width: 768px) 100vw,
+                   (max-width: 1200px) 50vw,
+                   33vw"
+            style={{ objectFit: "cover" }}
             className={`rounded-lg transition-transform duration-300 ${
               showDetails ? "scale-110" : "scale-100"
             }`}
@@ -49,8 +52,11 @@ const CharacterCard = ({ character }: any) => {
         <Image
           src={character.image}
           alt={character.name}
-          layout="fill"
-          objectFit="cover"
+          fill
+          sizes="(max-width: 768px) 100vw,
+                 (max-width: 1200px) 50vw,
+                 33vw"
+          style={{ objectFit: "cover" }}
           className="rounded-lg opacity-50"
         />
         <div className="relative z-10">
