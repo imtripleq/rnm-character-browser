@@ -1,29 +1,47 @@
 {
   "name": "rnm-graphql-server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "compile": "tsc",
-    "build": "tsc",
-    "start": "npm run compile && node ./dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "concurrently \"ts-node-dev --respawn --watch ./**/*.graphql ./src/index.ts\" \"npm run generate --watch\"",
+    "build": "tsc && copyfiles -u 1 src/schema.graphql dist/",
+    "start": "npm run build && nodemon ./dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": "graphql-codegen"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
-  "type": "module",
   "dependencies": {
+    "@apollo/datasource-rest": "^6.3.0",
     "@apollo/server": "^4.10.5",
-    "axios": "^1.7.2",
+    "@as-integrations/aws-lambda": "^3.1.0",
+    "apollo-server-lambda": "^3.13.0",
+    "aws-sdk": "^2.1666.0",
+    "aws-serverless-express": "^3.4.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "graphql": "^16.9.0"
+    "graphql": "^16.9.0",
+    "graphql-tag": "^2.12.6"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/typescript": "^4.0.9",
+    "@graphql-codegen/typescript-resolvers": "^4.2.1",
     "@types/cors": "^2.8.17",
     "@types/node": "^20.14.12",
+    "@types/uuid": "^10.0.0",
+    "concurrently": "^8.2.2",
+    "copyfiles": "^2.4.1",
+    "nodemon": "^3.0.0",
+    "serverless-dotenv-plugin": "^6.0.0",
+    "serverless-plugin-typescript": "^2.1.5",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.5.4"
   }
 }

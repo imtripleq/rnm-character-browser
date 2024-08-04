@@ -11,8 +11,8 @@ import { IoPersonSharp } from "react-icons/io5";
 import { SiAlienware } from "react-icons/si";
 import { FaHeartbeat, FaUserAlt } from "react-icons/fa";
 
-export const getSpeciesIcon = (species) => {
-  switch (species.toLowerCase()) {
+export const getSpeciesIcon = (species: any) => {
+  switch (species?.toLowerCase()) {
     case "alien":
       return <SiAlienware />;
     case "animal":
@@ -40,8 +40,8 @@ export const getSpeciesIcon = (species) => {
   }
 };
 
-export const getStatusIcon = (status) => {
-  switch (status.toLowerCase()) {
+export const getStatusIcon = (status: any) => {
+  switch (status?.toLowerCase()) {
     case "alive":
       return <GiHealthNormal />;
     case "dead":

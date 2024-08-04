@@ -1,0 +1,111 @@
+type Character {
+  id: ID!
+  name: String
+  status: String
+  image: String
+  species: String
+  gender: String
+  type: String
+  origin: Origin
+  location: Location
+  episode: [Episode]
+}
+
+type CustomCharacter {
+  id: ID
+  name: String
+  status: String
+  image: String
+  species: String
+  gender: String
+  type: String
+  origin: Origin
+  location: Location
+  isCustom: Boolean!
+}
+
+type PageInfo {
+  count: Int
+  pages: Int
+  next: String
+  prev: String
+}
+
+type CharacterResponse {
+  results: [Character]
+  info: PageInfo
+}
+
+type Origin {
+  id: ID
+  name: String
+  type: String
+}
+
+type Location {
+  created: String
+  dimension: String
+  id: ID
+  name: String
+  residents: [Character]
+  type: String
+}
+
+type Episode {
+  air_date: String
+  characters: [Character]!
+  created: String
+  episode: String
+  id: ID
+  name: String
+}
+
+input FilterCharacter {
+  gender: String
+  name: String
+  species: String
+  status: String
+  type: String
+}
+
+input NewCharacterInput {
+  id: ID
+  name: String!
+  status: String!
+  image: String
+  species: String
+  gender: String
+  type: String
+  origin: OriginInput
+  location: LocationInput
+  episode: [EpisodeInput]
+  isCustom: Boolean!
+}
+
+input OriginInput {
+  name: String
+  type: String
+}
+
+input LocationInput {
+  name: String
+  type: String
+}
+
+input EpisodeInput {
+  air_date: String
+  name: String
+  episode: String
+}
+
+type Mutation {
+  createCharacter(input: NewCharacterInput!): CustomCharacter
+  deleteCharacter(id: ID!): String
+}
+
+type Query {
+  characters(page: Int, filter: FilterCharacter): CharacterResponse
+  character(id: ID!): Character
+  getCustomCharacter(id: ID!): CustomCharacter
+  listCustomCharacters: [CustomCharacter]
+}

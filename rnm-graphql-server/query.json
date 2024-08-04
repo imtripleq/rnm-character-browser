@@ -1,0 +1,17 @@
+{
+    "version": "2",
+    "headers": {
+      "content-type": "application/json"
+    },
+    "isBase64Encoded": false,
+    "rawQueryString": "",
+    "requestContext": {
+      "http": {
+        "method": "POST"
+      }
+    },
+    "rawPath": "/",
+    "routeKey": "/",
+    "body": "{\"operationName\":null,\"variables\":{},\"query\":\"{ character(id: \\\"1\\\") { id name status image species gender type origin { name id type } location { name } episode { episode name created id air_date } } }\"}"
+  }
+  

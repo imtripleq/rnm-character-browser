@@ -6,40 +6,20 @@ import React, { Suspense } from "react";
 import Loading from "@/components/Loading";
 import Image from "next/image";
 import { FaArrowLeft } from "react-icons/fa";
-
-const GET_CHARACTER = gql`
-  query GetCharacter($id: ID!) {
-    character(id: $id) {
-      id
-      name
-      image
-      status
-      species
-      origin {
-        name
-        id
-        type
-      }
-      location {
-        name
-      }
-      episode {
-        episode
-        name
-      }
-    }
-  }
-`;
+import { GET_CHARACTER, GET_CUSTOM_CHARACTER } from "@/lib/queries";
 
 const CharacterDetail = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const id = searchParams.get("id");
+  const isCustom = searchParams.get("isCustom") === "true";
 
-  const { loading, error, data } = useQuery(GET_CHARACTER, {
-    variables: { id },
-  });
-  console.log("🚀 ~ CharacterDetail ~ data!!", data);
+  const { loading, error, data } = useQuery(
+    isCustom ? GET_CUSTOM_CHARACTER : GET_CHARACTER,
+    {
+      variables: { id },
+    }
+  );
 
   if (loading)
     return (
@@ -48,7 +28,8 @@ const CharacterDetail = () => {
       </div>
     );
   if (error) return <p>Error: {error.message}</p>;
-  const character = data.character;
+
+  const character = isCustom ? data.getCustomCharacter : data.character;
   if (!character) return <p>Character Not Found</p>;
 
   return (
@@ -96,7 +77,7 @@ const CharacterDetail = () => {
                   {character.location.name}
                 </dd>
               </div>
-              {character.episode.length > 0 && (
+              {character.episode && character.episode.length > 0 && (
                 <div className="flex">
                   <dt className="font-medium text-gray-300 w-1/3">Episodes:</dt>
                   <dd className="text-gray-100 w-2/3">

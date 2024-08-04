@@ -1,0 +1,35 @@
+org: imtripleq
+app: rnm-graphql-serverless
+service: apollo-lambda
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: ap-southeast-2
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:PutItem"
+        - "dynamodb:GetItem"
+        - "dynamodb:Scan"
+        - "dynamodb:DeleteItem"
+      Resource: "arn:aws:dynamodb:ap-southeast-2:*:table/CustomCharacters"
+  httpApi:
+    cors: true
+functions:
+  graphql:
+    handler: dist/index.handler
+    events:
+      - httpApi:
+          path: /
+          method: POST
+      - httpApi:
+          path: /
+          method: GET
+plugins:
+  - serverless-dotenv-plugin
+
+custom:
+  dotenv:
+    include:
+      - API_URL
+      - CUSTOM_CHARACTER_TABLE

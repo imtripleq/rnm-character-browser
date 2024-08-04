@@ -1,13 +1,17 @@
 # Dennis' Demo - Rick and Morty Character Browser
 
-Explore and discover characters from the Rick and Morty universe. This demo showcases a dynamic character browser built with Apollo GraphQL and Next.js, featuring detailed profiles, seamless pagination, and real-time data fetching.
+Explore and discover characters from the Rick and Morty universe. This demo showcases a dynamic character browser built with Apollo GraphQL and Next.js, featuring detailed profiles, seamless pagination, real-time data fetching, custom character creation, and integration with AWS services such as Cognito, AppSync, DynamoDB, IAM, and Amplify for a full-stack app.
 
 ## Features
 
-- Browse detailed profiles of Rick and Morty characters.
-- Seamless pagination to navigate through different pages of characters.
-- Dynamic data fetching using Apollo GraphQL.
-- Built using the monorepo method to streamline project management and simplify the setup process.
+- Browse Detailed Profiles: Explore in-depth profiles of characters from the Rick and Morty universe.
+- Seamless Pagination: Effortlessly navigate through different pages of characters.
+- Dynamic Data Fetching: Real-time data fetching using Apollo GraphQL.
+- Custom Character Creation: Create and manage your own custom characters.
+- User Authentication: Secure authentication using AWS Cognito.
+- Serverless Backend: Utilize AWS Lambda for serverless functions and AWS AppSync with DynamoDB for custom character database management.
+- Apollo Client Caching: Efficient data caching and state management with Apollo Client.
+- Monorepo Structure: Streamline project management and simplify the setup process.
 
 ## Live Demo
 
@@ -53,10 +57,14 @@ cd ..
 cd rnm-character-browser
 ```
 
-2. Create a `.env` file in the root directory of the rnm-character-browser, copy and paste below to the file (see .env.example):
+2. Create a `.env` file in the root directory of the rnm-character-browser, copy and paste below to the file (see .env.example), or reach out to myself for the key:
 
 ```bash
 NEXT_PUBLIC_APOLLO_CLIENT_URL=http://localhost:4000/graphql
+NEXT_PUBLIC_USER_POOL_ID=
+NEXT_PUBLIC_APP_CLIENT_ID=
+NEXT_PUBLIC_IDENTITY_POOL_ID=
+NEXT_PUBLIC_REGION=
 ```
 
 3. Go back to the root folder:
@@ -98,3 +106,13 @@ yarn dev
 **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
 
 **Flowbite**: A component library built on top of Tailwind CSS that provides pre-designed components.
+
+**AWS Cognito**: Secure user authentication and authorization.
+
+**AWS Lambda**: Serverless computing service for backend functions.
+
+**AWS AppSync**: Managed GraphQL service for real-time data querying.
+
+**DynamoDB**: Managed NoSQL database for custom character storage.
+
+**Serverless Framework**: Framework for building and deploying serverless applications on AWS.

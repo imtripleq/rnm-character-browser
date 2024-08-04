@@ -7,167 +7,58 @@ import { expressMiddleware } from "@apollo/server/express4";
 import http from "http";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import dotenv from "dotenv";
-import axios from "axios";
-
-// Resolvers query has to match with frontend to avoid returning null value to the frontend request
-export const resolvers = {
-  Query: {
-    characters: async (_, { page, filter }) => {
-      const query = `
-          query($page: Int, $filter: FilterCharacter) {
-            characters(page: $page, filter: $filter) {
-              results {
-                id
-                name
-                status
-                image
-                species
-                gender
-                type
-                origin {
-                  name
-                }
-                location {
-                  name
-                }
-                episode {
-                  episode
-                  name
-                  created
-                  id
-                  air_date
-                }
-              }
-              info {
-                count
-                pages
-                next
-                prev
-              }
-            }
-          }
-        `;
-
-      const res = await axios.post(process.env.API_URL, {
-        query,
-        variables: { page, filter },
-      });
-
-      return res.data.data.characters;
-    },
-    character: async (_, { id }) => {
-      const query = `
-          query($id: ID!) {
-            character(id: $id) {
-              id
-              name
-              status
-              image
-              species
-              gender
-              type
-              origin {
-                name
-                id
-                type
-              }
-              location {
-                name
-              }
-              episode {
-                episode
-                name
-                created
-                id
-                air_date
-              }
-            }
-          }
-        `;
-
-      const res = await axios.post(process.env.API_URL, {
-        query,
-        variables: { id },
-      });
-
-      return res.data.data.character;
-    },
-  },
-};
-
-export const typeDefs = `#graphql
-  type Character {
-    id: ID
-    name: String
-    status: String
-    image: String
-    species: String
-    gender: String
-    type: String
-    origin: Origin
-    location: Location
-    episode: [Episode]
-  }
-
-  type PageInfo {
-    count: Int
-    pages: Int
-    next: String
-    prev: String
-  }
-
-  type CharacterResponse {
-    results: [Character]
-    info: PageInfo
-  }
-
-  type Origin {
-    id: ID
-    name: String
-    type: String
-  }
-
-  type Location {
-    created: String
-    dimension: String
-    id: ID
-    name: String
-    # residents: [Character]!
-    type: String
-  }
-
-  type Episode {
-    air_date: String
-    # characters: [Character]!
-    created: String
-    episode: String
-    id: ID
-    name: String
-  }
-
-  input FilterCharacter{
-    gender: String
-    name: String
-    species: String
-    status: String
-    type: String
-  }
-
-  type Query {
-    characters(page: Int, filter: FilterCharacter): CharacterResponse
-    character(id: ID!): Character
-  }
-`;
+import {
+  startServerAndCreateLambdaHandler,
+  handlers,
+} from "@as-integrations/aws-lambda";
+import { readFileSync } from "fs";
+import path from "path";
+import { gql } from "graphql-tag";
+import CharacterAPI from "./datasources/character-api";
+import { resolvers } from "./resolvers";
+import { CustomCharacterAPI } from "./datasources/custom-character-api";
+import {
+  ApolloServerPluginLandingPageLocalDefault,
+  ApolloServerPluginLandingPageProductionDefault,
+} from "@apollo/server/plugin/landingPage/default";
 
 dotenv.config();
 const app = express();
 const httpServer = http.createServer(app);
 const PORT = process.env.PORT || 4000;
 
+const typeDefs = gql(
+  readFileSync(path.resolve(__dirname, "./schema.graphql"), {
+    encoding: "utf-8",
+  })
+);
+
+const createContext = async (context: any) => {
+  const { req } = context;
+  const { cache } = server;
+  const token = req?.headers?.token || null;
+  return {
+    token,
+    dataSources: {
+      characterAPI: new CharacterAPI({ cache }),
+      customCharacterAPI: new CustomCharacterAPI(),
+    },
+  };
+};
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  plugins: [
+    ApolloServerPluginDrainHttpServer({ httpServer }),
+    process.env.NODE_ENV === "production"
+      ? ApolloServerPluginLandingPageProductionDefault({
+          graphRef: "my-graph-id@my-graph-variant",
+
+          footer: false,
+        })
+      : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
+  ],
 });
 
 async function startServer() {
@@ -179,7 +70,7 @@ async function startServer() {
       cors<cors.CorsRequest>(),
       express.json(),
       expressMiddleware(server, {
-        context: async ({ req }) => ({ token: req.headers.token }),
+        context: createContext,
       })
     );
 
@@ -192,4 +83,18 @@ async function startServer() {
   }
 }
 
-startServer();
+// Local environment
+if (process.env.NODE_ENV !== "lambda") {
+  startServer();
+}
+
+// AWS Lambda
+const handler = startServerAndCreateLambdaHandler(
+  server,
+  handlers.createAPIGatewayProxyEventV2RequestHandler(),
+  {
+    context: createContext,
+  }
+);
+
+export { handler };

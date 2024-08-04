@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { getSpeciesIcon, getStatusIcon } from "@/helper/iconMapper";
+import { getSpeciesIcon, getStatusIcon } from "@/helpers/iconMapper";
 import { FaHeartbeat, FaUserAlt } from "react-icons/fa";
+import { useAuthenticator } from "@aws-amplify/ui-react";
+import { AiOutlineClose } from "react-icons/ai";
+import Link from "next/link";
 
-const CharacterCard = ({ character }: any) => {
+const CharacterCard = ({ character, onDelete }: any) => {
   const [showDetails, setShowDetails] = useState(false);
+  const { user } = useAuthenticator((context) => [context.user]);
 
   return (
     <div
@@ -20,7 +24,7 @@ const CharacterCard = ({ character }: any) => {
         </h2>
         <div className="w-36 h-36 md:w-48 md:h-56 relative mb-4">
           <Image
-            src={character.image}
+            src={character?.image || ""}
             alt={character.name}
             fill
             sizes="(max-width: 768px) 100vw,
@@ -49,29 +53,43 @@ const CharacterCard = ({ character }: any) => {
           showDetails ? "opacity-100 scale-105" : "opacity-0 scale-100"
         }`}
       >
-        <Image
-          src={character.image}
-          alt={character.name}
-          fill
-          sizes="(max-width: 768px) 100vw,
-                 (max-width: 1200px) 50vw,
-                 33vw"
-          style={{ objectFit: "cover" }}
-          className="rounded-lg opacity-50"
-        />
-        <div className="relative z-10">
-          <h2 className="text-2xl font-bold mb-4 font-rick-and-morty">
-            {character.name}
-          </h2>
-          <p className="mb-2">
-            <FaUserAlt className="inline mr-2" />
-            Species: {character.species}
-          </p>
-          <p className="mb-2">
-            <FaHeartbeat className="inline mr-2" />
-            Status: {character.status}
-          </p>
-        </div>
+        <Link
+          href={`/character?id=${character?.id}&isCustom=${character.isCustom}`}
+        >
+          <div className="static w-full h-full">
+            <Image
+              src={character?.image || ""}
+              alt={character.name}
+              fill
+              sizes="(max-width: 768px) 100vw,
+                   (max-width: 1200px) 50vw,
+                   33vw"
+              className="rounded-lg opacity-50"
+              style={{ objectFit: "cover" }}
+            />
+          </div>
+          <div className="relative z-10">
+            <h2 className="text-2xl font-bold mb-4 font-rick-and-morty">
+              {character.name}
+            </h2>
+            <p className="mb-2">
+              <FaUserAlt className="inline mr-2" />
+              Species: {character.species}
+            </p>
+            <p className="mb-2">
+              <FaHeartbeat className="inline mr-2" />
+              Status: {character.status}
+            </p>
+          </div>
+        </Link>
+        {user && character.isCustom && (
+          <button
+            onClick={() => onDelete(character.id)}
+            className="absolute top-4 right-4 text-red-500 hover:text-red-700 bg-white rounded-full p-1 z-20"
+          >
+            <AiOutlineClose size={20} />
+          </button>
+        )}
       </div>
     </div>
   );

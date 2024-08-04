@@ -7,6 +7,12 @@ module.exports = {
         port: "",
         pathname: "/api/**",
       },
+      {
+        protocol: "https",
+        hostname: "robohash.org",
+        port: "",
+        pathname: "/*",
+      },
     ],
   },
 };
